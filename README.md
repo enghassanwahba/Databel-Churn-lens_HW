@@ -30,6 +30,7 @@ The metrics rendered on the report canvas are powered by these scalable DAX calc
 
 Measure 1: Total Customers. Account for the total number of customers
 Total Customers = COUNT('Databel - Data'[Customer ID])
+
 Measure 2: Churned .Account for the total number of customers lost by using Filter Column 
 Churn Label=”YES”
 Churned = CALCULATE([Total Customers],FILTER('Databel - Data','Databel - Data',
@@ -38,12 +39,15 @@ Churned = CALCULATE([Total Customers],FILTER('Databel - Data','Databel - Data',
 Measure 3: Active Customers .Account for the total number of Active customers by using Filter Column Churn Label= “NO”
 Active Customers= CALCULATE([Total Customers],FILTER('Databel - Data','Databel - Data',
 'Databel - Data'[Churn Label]="NO"))
+
 Measure 4: Churn Percentage Rate. Determine the general proportional rate of loss against the historical base:
 Churn Rate = 
 [Churned]/[Total Customers]
+
 Measure 5: Total Chages. Determine the Total Charges of all Customers.
 Total Charges = 
 SUM('Databel - Data'[Total Charges])
+
 ---
 4. Dashboard Canvas Layout Mapping
 The front-facing visual interface is architected utilizing a structured dark theme canvas, optimizing data density and prioritizing visual tracking:
@@ -62,4 +66,4 @@ Before pushing changes to production or publishing to Power BI Service, complete
 1.Confirm cross-filtering interactions (Edit Interactions) between Churn Category and Top 10 Reasons render accurate synchronized subsets.
 2.Verify that all currency fields map directly to Fixed Decimal numeric data types to eliminate round-off calculation drift.
 3.Ensure any added slicer automatically triggers a re-evaluation of the Churn Rate gauge to preserve true dynamic slicing capability.
-
+----
