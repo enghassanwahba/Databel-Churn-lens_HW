@@ -51,19 +51,31 @@ SUM('Databel - Data'[Total Charges])
 ---
 4. Dashboard Canvas Layout Mapping
 The front-facing visual interface is architected utilizing a structured dark theme canvas, optimizing data density and prioritizing visual tracking:
+
 Top Panel: Executive KPI Summary Block
-Renders standalone large KPI cards displaying 'Total Customers (6,687)', 'Total Charges ($7M)', 'Active (4,891)', and 'Churned (1,796)' to give an immediate high-level business pulse upon landing.
+Renders standalone large KPI cards displaying 'Total Customers (6,687)', 'Total Charges ($7M)', 'Active (4,891)', and 'Churned (1,796)'
+to give an immediate high-level business pulse upon landing.
+
 Left Control Panel: Global Slicers
 Features quick-filter containers mapping across State, Gender, and Customer Group to instantly slice the entire analytical canvas down to localized segments.
+
 Central Analysis Grid: Root Causes & Behavioral Profiling
 Provides a side-by-side diagnostic breakdown of why and how customers are leaving:
+
 • Top 10 Churn Reason Visual:A Horizontal Bar Chart using a Top N Filter (10) to prioritize high-impact issues. It reveals that 'Competitor made better offer' (311 cases) and 'Competitor had better devices' (297 cases) are the primary churn drivers.
+
 • Churn Rate by Customer Service Calls:A Bar-and-Line combo chart showing a sharp upward spike in churn probability for clients interacting with customer support multiple times.
+
 • Churn Rate by Contract Type Visual:A Horizontal Bar Chart segmenting churn counts across different contractual tiers, indicating that Month-to-Month contracts carry an extremely high churn risk (47%) compared to longer commitments.
+
 • Churn Rate by State Map:An interactive map visual isolating geographic clusters to discover macro-regional service degradation.
-5. Business Analytics Checklist
+
+6. Business Analytics Checklist
 Before pushing changes to production or publishing to Power BI Service, complete the following data integrity verification checks:
+
 1.Confirm cross-filtering interactions (Edit Interactions) between Churn Category and Top 10 Reasons render accurate synchronized subsets.
+
 2.Verify that all currency fields map directly to Fixed Decimal numeric data types to eliminate round-off calculation drift.
+
 3.Ensure any added slicer automatically triggers a re-evaluation of the Churn Rate gauge to preserve true dynamic slicing capability.
 ----
