@@ -4,6 +4,12 @@
 ## 📝 Project Description
 Interactive Power BI dashboard for **Databel** Telecom, focused on customer churn analysis. It tracks churn rates, identifies top retention risks (such as competitor threats and support issues), and provides data-driven insights to minimize revenue loss.
 ---
+KPI Metric Name	Current Value	Operational Significance
+Total Customers	6,687	Total active and churned customer base ingested into the model.
+Total Charges	$7M	Cumulative gross financial billing volume across entire lifecycle.
+Active Customers	4,891	Currently preserved base yielding active operational recurring revenue.
+Churned Customers	1,796	Subscribers lost to competitors or churned due to dissatisfaction.
+---
 <img width="1457" height="901" alt="Databel-Churn-Lens_HW" src="https://github.com/user-attachments/assets/939ca75e-a1bc-468a-b37b-19ff0bc7c734" />
 
 ---
@@ -19,35 +25,41 @@ Interactive Power BI dashboard for **Databel** Telecom, focused on customer chur
 * **Excel / Power Query**: Data source ingestion, text transformations, and handling missing values in churn logs.
 * **DAX (Data Analysis Expressions)**: Used to write resilient, scalable business calculations and key performance metrics.
 
-## 📂 Data Model Columns Applied
-The dashboard architectures map directly to the `Databel - Data` schema using the following operational columns:
-* **Churn Logs**: `Churn Label`, `Churn Category`, `Churn Reason`
-* **Account Financials**: `Account Length (in months)`, `Monthly Charge`, `Total Charges`, `Contract Type`
-* **Usage Metrics**: `Avg Monthly GB Download`, `Unlimited Data Plan`, `Intl Plan`
-* **Demographics & Care**: `Customer Service Calls`, `Age`, `Gender`, `Senior`, `Under 30`
-
 ## 💡 Key Core DAX Measures
 The metrics rendered on the report canvas are powered by these scalable DAX calculations:
 
-### 1. Total Churned Customers Count
-```dax
-Churned = CALCULATE(COUNT('Databel - Data'[Customer ID]), 'Databel - Data'[Churn Label] = "Yes")
+Measure 1: Total Customers. Account for the total number of customers
+Total Customers = COUNT('Databel - Data'[Customer ID])
+Measure 2: Churned .Account for the total number of customers lost by using Filter Column 
+Churn Label=”YES”
+Churned = CALCULATE([Total Customers],FILTER('Databel - Data','Databel - Data',
+'Databel - Data'[Churn Label]="YES"))
+
+Measure 3: Active Customers .Account for the total number of Active customers by using Filter Column Churn Label= “NO”
+Active Customers= CALCULATE([Total Customers],FILTER('Databel - Data','Databel - Data',
+'Databel - Data'[Churn Label]="NO"))
+Measure 4: Churn Percentage Rate. Determine the general proportional rate of loss against the historical base:
+Churn Rate = 
+[Churned]/[Total Customers]
+Measure 5: Total Chages. Determine the Total Charges of all Customers.
+Total Charges = 
+SUM('Databel - Data'[Total Charges])
 ```
 
-### 2. Canvas Performance Optimization Query (Top 10 Reasons Logic)
-The visual engine utilizes centralized query blocks to isolate high-impact business bottlenecks directly on the dashboard layout:
-```dax
-DEFINE
-    VAR __SQDS0Core = 
-        SUMMARIZECOLUMNS('Databel - Data'[Churn Reason], "Churned", '_Measures'[Churned])
-    VAR __SQDS0BodyLimited = 
-        TOPN(10, __SQDS0Core, [Churned], 0)
-```
-
-## 💻 How to Run and Refresh
-1. Clone this repository or download the `.pbix` dashboard file.
-2. Launch the project inside **Power BI Desktop**.
-3. To re-link the database trail: Navigate to the Home Ribbon -> `Transform Data` -> `Data Source Settings`.
-4. Click `Change Source`, map the dataset directory to the local folder path on your machine, then click `Close & Apply`.
-5. Select `Refresh` from the top navigation to load the synchronized metrics onto the interactive dashboard.
-٦.
+4. Dashboard Canvas Layout Mapping
+The front-facing visual interface is architected utilizing a structured dark theme canvas, optimizing data density and prioritizing visual tracking:
+Top Panel: Executive KPI Summary Block
+Renders standalone large KPI cards displaying 'Total Customers (6,687)', 'Total Charges ($7M)', 'Active (4,891)', and 'Churned (1,796)' to give an immediate high-level business pulse upon landing.
+Left Control Panel: Global Slicers
+Features quick-filter containers mapping across State, Gender, and Customer Group to instantly slice the entire analytical canvas down to localized segments.
+Central Analysis Grid: Root Causes & Behavioral Profiling
+Provides a side-by-side diagnostic breakdown of why and how customers are leaving:
+• Top 10 Churn Reason Visual:A Horizontal Bar Chart using a Top N Filter (10) to prioritize high-impact issues. It reveals that 'Competitor made better offer' (311 cases) and 'Competitor had better devices' (297 cases) are the primary churn drivers.
+• Churn Rate by Customer Service Calls:A Bar-and-Line combo chart showing a sharp upward spike in churn probability for clients interacting with customer support multiple times.
+• Churn Rate by Contract Type Visual:A Horizontal Bar Chart segmenting churn counts across different contractual tiers, indicating that Month-to-Month contracts carry an extremely high churn risk (47%) compared to longer commitments.
+• Churn Rate by State Map:An interactive map visual isolating geographic clusters to discover macro-regional service degradation.
+5. Business Analytics Checklist
+Before pushing changes to production or publishing to Power BI Service, complete the following data integrity verification checks:
+1.Confirm cross-filtering interactions (Edit Interactions) between Churn Category and Top 10 Reasons render accurate synchronized subsets.
+2.Verify that all currency fields map directly to Fixed Decimal numeric data types to eliminate round-off calculation drift.
+3.Ensure any added slicer automatically triggers a re-evaluation of the Churn Rate gauge to preserve true dynamic slicing capability.
