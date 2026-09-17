@@ -44,8 +44,7 @@ Churn Rate =
 Measure 5: Total Chages. Determine the Total Charges of all Customers.
 Total Charges = 
 SUM('Databel - Data'[Total Charges])
-```
-
+---
 4. Dashboard Canvas Layout Mapping
 The front-facing visual interface is architected utilizing a structured dark theme canvas, optimizing data density and prioritizing visual tracking:
 Top Panel: Executive KPI Summary Block
@@ -63,3 +62,4 @@ Before pushing changes to production or publishing to Power BI Service, complete
 1.Confirm cross-filtering interactions (Edit Interactions) between Churn Category and Top 10 Reasons render accurate synchronized subsets.
 2.Verify that all currency fields map directly to Fixed Decimal numeric data types to eliminate round-off calculation drift.
 3.Ensure any added slicer automatically triggers a re-evaluation of the Churn Rate gauge to preserve true dynamic slicing capability.
+
